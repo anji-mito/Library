@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 class Loan {
     var reader: Reader = Reader()
-    var book: Book = Book()
+    var book: Book? = null
     var loanDate: LocalDateTime? = LocalDateTime.now()
     var returnDate: LocalDate? = null
 }
