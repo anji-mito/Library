@@ -1,8 +1,8 @@
 package com.bftcom.library.book.model
 
-class Book {
-
-    var name: String? = null
-    var author: String? = null
-    var status: Status? = null
-}
+data class Book (
+    val id: Long,
+    val name: String,
+    val author: String,
+    val status: Status
+)
