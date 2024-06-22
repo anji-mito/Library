@@ -1,56 +1,44 @@
 package com.bftcom.library.book.controller
 
 import com.bftcom.library.book.dto.BookDto
+import com.bftcom.library.book.service.BookService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/books")
-class BookController {
+class BookController(
+    private val bookService: BookService,
+) {
+
+    @PostMapping()
+    fun create(@RequestBody dto: BookDto): BookDto {
+        return bookService.create(dto)
+    }
 
     @GetMapping
     fun getAll(): List<BookDto> {
-        return listOf(
-            BookDto(
-                id = 1,
-                title = "Book 1",
-                author = "Author 1"
-            )
-        )
+        return bookService.getAll()
     }
 
     @GetMapping("/{id}")
     fun getById(@PathVariable id: Int): BookDto {
-        return BookDto(
-            id = id,
-            title = "Book $id",
-            author = "Author $id"
-        )
+        return bookService.getById(id)
     }
 
-    @PostMapping()
-    fun create(@PathVariable id: Int): BookDto {
-        return BookDto(
-            id = id,
-            title = "Book $id",
-            author = "Author $id"
-        )
-    }
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int): BookDto {
-        return BookDto(
-            id = id,
-            title = "Book $id",
-            author = "Author $id"
-        )
+    fun update(@PathVariable id: Int, @RequestBody dto: BookDto): BookDto {
+        return bookService.update(id, dto)
     }
+
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Int) {
-
+        bookService.delete(id)
     }
 }
