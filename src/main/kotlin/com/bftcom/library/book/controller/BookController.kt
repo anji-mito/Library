@@ -17,11 +17,6 @@ class BookController(
     private val bookService: BookService,
 ) {
 
-    @PostMapping()
-    fun create(@RequestBody dto: BookDto): BookDto {
-        return bookService.create(dto)
-    }
-
     @GetMapping
     fun getAll(): List<BookDto> {
         return bookService.getAll()
@@ -31,6 +26,12 @@ class BookController(
     fun getById(@PathVariable id: Int): BookDto {
         return bookService.getById(id)
     }
+
+    @PostMapping()
+    fun create(@RequestBody dto: BookDto): BookDto {
+        return bookService.create(dto)
+    }
+
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Int, @RequestBody dto: BookDto): BookDto {

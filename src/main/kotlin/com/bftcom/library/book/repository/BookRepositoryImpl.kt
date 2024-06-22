@@ -3,7 +3,9 @@ package com.bftcom.library.book.repository
 import com.bftcom.library.book.model.Book
 import com.bftcom.library.book.model.Status
 import org.springframework.jdbc.core.RowMapper
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -11,7 +13,24 @@ class BookRepositoryImpl(
     private val jdbcTemplate: NamedParameterJdbcTemplate
 ) : BookRepository {
     override fun create(book: Book): Book {
-        TODO("Not yet implemented")
+        val keyHolder = GeneratedKeyHolder()
+        jdbcTemplate.update(
+            "insert into book (id, title, author, status) values (:id, :title, :author, :status)",
+            MapSqlParameterSource(
+                mapOf(
+                    "title" to book.title,
+                    "author" to book.author,
+                    "status" to book.status
+                )),
+            keyHolder,
+            listOf("id").toTypedArray()
+        )
+        return Book(
+            id = keyHolder.key!!.toLong(),
+            title = book.title,
+            author = book.author,
+            status = book.status
+        )
     }
 
     override fun getAll(): List<Book> {
@@ -30,7 +49,25 @@ class BookRepositoryImpl(
     }
 
     override fun update(id: Int, book: Book): Book {
-        TODO("Not yet implemented")
+        val keyHolder = GeneratedKeyHolder()
+        jdbcTemplate.update(
+            "insert into book (id, title, author, status) values (:id, :title, :author, :status)",
+            MapSqlParameterSource(
+            mapOf(
+                "id" to id,
+                "title" to book.title,
+                "author" to book.author,
+                "status" to book.status
+            )),
+            keyHolder,
+            listOf("id").toTypedArray()
+        )
+        return Book(
+            id = keyHolder.key!!.toLong(),
+            title = book.title,
+            author = book.author,
+            status = book.status
+        )
     }
 
     override fun delete(id: Int) {

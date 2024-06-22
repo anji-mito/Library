@@ -22,7 +22,7 @@ class BookServiceImpl(
     }
 
     override fun create(dto: BookDto): BookDto {
-        TODO("Not yet implemented")
+        return bookRepository.create(dto.toModel()).toDto()
     }
 
     override fun update(id: Int, dto: BookDto): BookDto {
@@ -34,6 +34,12 @@ class BookServiceImpl(
     }
 
     private fun Book.toDto() = BookDto(
+        id = this.id,
+        title = this.title,
+        author = this.author,
+        status = this.status
+    )
+    private fun BookDto.toModel() = Book(
         id = this.id,
         title = this.title,
         author = this.author,
