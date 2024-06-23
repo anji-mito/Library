@@ -5,8 +5,8 @@ import com.bftcom.library.book.dto.BookDto
 
 interface BookService {
     fun getAll(): List<BookDto>
-    fun getById(id: Int): BookDto
+    fun getById(id: Long): BookDto
     fun create(dto: BookDto): BookDto
-    fun update(id: Int, dto: BookDto): BookDto
-    fun delete( id: Int)
+    fun update(id: Long, dto: BookDto): BookDto
+    fun delete( id: Long)
 }

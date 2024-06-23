@@ -10,11 +10,10 @@ class BookServiceImpl(
     private val bookRepository: BookRepository
 ) : BookService {
     override fun getAll(): List<BookDto> {
-        return bookRepository.getAll()
-            .map { it.toDto() }
+        return bookRepository.getAll().map { it.toDto() }
     }
 
-    override fun getById(id: Int): BookDto {
+    override fun getById(id: Long): BookDto {
         bookRepository.getById(id)?.let {
             return it.toDto()
         }
@@ -25,24 +24,19 @@ class BookServiceImpl(
         return bookRepository.create(dto.toModel()).toDto()
     }
 
-    override fun update(id: Int, dto: BookDto): BookDto {
-        TODO("Not yet implemented")
+    override fun update(id: Long, dto: BookDto): BookDto {
+        return bookRepository.update(id, dto.toModel()).toDto()
     }
 
-    override fun delete(id: Int) {
-        TODO("Not yet implemented")
+    override fun delete(id: Long) {
+        bookRepository.delete(id)
     }
 
     private fun Book.toDto() = BookDto(
-        id = this.id,
-        title = this.title,
-        author = this.author,
-        status = this.status
+        id = this.id, title = this.title, author = this.author, status = this.status
     )
+
     private fun BookDto.toModel() = Book(
-        id = this.id,
-        title = this.title,
-        author = this.author,
-        status = this.status
+         id = this.id, title = this.title, author = this.author, status = this.status
     )
 }

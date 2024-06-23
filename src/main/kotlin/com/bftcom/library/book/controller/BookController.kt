@@ -23,7 +23,7 @@ class BookController(
     }
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Int): BookDto {
+    fun getById(@PathVariable id: Long): BookDto {
         return bookService.getById(id)
     }
 
@@ -34,12 +34,12 @@ class BookController(
 
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int, @RequestBody dto: BookDto): BookDto {
+    fun update(@PathVariable id: Long, @RequestBody dto: BookDto): BookDto {
         return bookService.update(id, dto)
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Int) {
+    fun delete(@PathVariable id: Long) {
         bookService.delete(id)
     }
 }

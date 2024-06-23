@@ -14,13 +14,14 @@ class BookRepositoryImpl(
 ) : BookRepository {
     override fun create(book: Book): Book {
         val keyHolder = GeneratedKeyHolder()
+        val sqlQuery =  "insert into books (title, author, status) values (:title, :author, :status)"
         jdbcTemplate.update(
-            "insert into book (id, title, author, status) values (:id, :title, :author, :status)",
+            sqlQuery,
             MapSqlParameterSource(
                 mapOf(
                     "title" to book.title,
                     "author" to book.author,
-                    "status" to book.status
+                    "status" to book.status.name
                 )),
             keyHolder,
             listOf("id").toTypedArray()
@@ -35,43 +36,42 @@ class BookRepositoryImpl(
 
     override fun getAll(): List<Book> {
         return jdbcTemplate.query(
-            "select * from book",
+            "select * from books",
             ROW_MAPPER
         )
     }
 
-    override fun getById(id: Int): Book? {
+    override fun getById(id: Long): Book? {
         return jdbcTemplate.query(
-            "select * from book where id = :id",
+            "select * from books where id = :id",
             mapOf("id" to id),
             ROW_MAPPER
         ).firstOrNull()
     }
 
-    override fun update(id: Int, book: Book): Book {
-        val keyHolder = GeneratedKeyHolder()
+    override fun update(id: Long, book: Book): Book {
         jdbcTemplate.update(
-            "insert into book (id, title, author, status) values (:id, :title, :author, :status)",
-            MapSqlParameterSource(
+            "update books set title = :title, author = :author, status = :status where id = :id",
             mapOf(
                 "id" to id,
                 "title" to book.title,
                 "author" to book.author,
-                "status" to book.status
-            )),
-            keyHolder,
-            listOf("id").toTypedArray()
+                "status" to book.status.name
+            )
         )
         return Book(
-            id = keyHolder.key!!.toLong(),
+            id = id,
             title = book.title,
             author = book.author,
             status = book.status
         )
     }
 
-    override fun delete(id: Int) {
-        TODO("Not yet implemented")
+    override fun delete(id: Long) {
+        jdbcTemplate.update(
+            "delete from books where id = :id",
+            mapOf("id" to id)
+        )
     }
 
     private companion object {
