@@ -33,10 +33,10 @@ class BookServiceImpl(
     }
 
     private fun Book.toDto() = BookDto(
-        id = this.id, title = this.title, author = this.author, status = this.status
+        id = this.id, title = this.title, author = this.author, status = this.status, isbn = this.isbn
     )
 
     private fun BookDto.toModel() = Book(
-         id = this.id, title = this.title, author = this.author, status = this.status
+         id = this.id, title = this.title, author = this.author, status = this.status, isbn = this.isbn
     )
 }

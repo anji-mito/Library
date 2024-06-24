@@ -2,12 +2,12 @@ package com.bftcom.library.loan.model
 
 import com.bftcom.library.book.model.Book
 import com.bftcom.library.reader.model.Reader
-import java.time.LocalDate
 import java.time.LocalDateTime
 
-class Loan {
-    var reader: Reader = Reader()
-    var book: Book? = null
-    var loanDate: LocalDateTime? = LocalDateTime.now()
-    var returnDate: LocalDate? = null
-}
+data class Loan(
+    val id: Long,
+    val reader: Reader,
+    val book: Book?,
+    val loanDate: LocalDateTime,
+    val loanDays: Int
+)

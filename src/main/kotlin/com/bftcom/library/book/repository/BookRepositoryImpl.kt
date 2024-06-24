@@ -8,20 +8,22 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 
-@Repository
+
 class BookRepositoryImpl(
     private val jdbcTemplate: NamedParameterJdbcTemplate
 ) : BookRepository {
     override fun create(book: Book): Book {
         val keyHolder = GeneratedKeyHolder()
-        val sqlQuery =  "insert into books (title, author, status) values (:title, :author, :status)"
+        val sqlQuery =  "insert into books (title, author, status, isbn) " +
+                        "values (:title, :author, :status, :isbn)"
         jdbcTemplate.update(
             sqlQuery,
             MapSqlParameterSource(
                 mapOf(
                     "title" to book.title,
                     "author" to book.author,
-                    "status" to book.status.name
+                    "status" to book.status.name,
+                    "isbn" to book.isbn
                 )),
             keyHolder,
             listOf("id").toTypedArray()
@@ -30,7 +32,8 @@ class BookRepositoryImpl(
             id = keyHolder.key!!.toLong(),
             title = book.title,
             author = book.author,
-            status = book.status
+            status = book.status,
+            isbn = book.isbn
         )
     }
 
@@ -51,19 +54,22 @@ class BookRepositoryImpl(
 
     override fun update(id: Long, book: Book): Book {
         jdbcTemplate.update(
-            "update books set title = :title, author = :author, status = :status where id = :id",
+            "update books set title = :title, author = :author, status = :status, isbn = :isbn" +
+                    " where id = :id",
             mapOf(
                 "id" to id,
                 "title" to book.title,
                 "author" to book.author,
-                "status" to book.status.name
+                "status" to book.status.name,
+                "isbn" to book.isbn
             )
         )
         return Book(
             id = id,
             title = book.title,
             author = book.author,
-            status = book.status
+            status = book.status,
+            isbn = book.isbn
         )
     }
 
@@ -80,7 +86,8 @@ class BookRepositoryImpl(
                 id = rs.getLong("id"),
                 title = rs.getString("title"),
                 author = rs.getString("author"),
-                status = Status.valueOf(rs.getString("status"))
+                status = Status.valueOf(rs.getString("status")),
+                isbn = rs.getString("isbn")
             )
         }
     }

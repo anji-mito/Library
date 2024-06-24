@@ -1,16 +1,9 @@
 package com.bftcom.library.reader.model
 
-import com.bftcom.library.book.model.Book
-import lombok.Data
-import java.time.LocalDate
-
-@Data
-class Reader {
-    var id: String? = null
-    var name: String? = null
-    var surname: String? = null
-    var email: String? = null
+data class Reader(
+    var id: Long,
+    var name: String,
+    var surname: String,
+    var email: String,
     var phone: String? = null
-    var registrationDate: LocalDate? = null
-    var borrowedBooks: List<Book>? = null
-}
+)
