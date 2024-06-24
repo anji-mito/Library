@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 data class Loan(
     val id: Long,
     val reader: Reader,
-    val book: Book?,
+    val book: Book,
     val loanDate: LocalDateTime,
     val loanDays: Int
 )

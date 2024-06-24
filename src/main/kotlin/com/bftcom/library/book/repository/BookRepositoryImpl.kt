@@ -8,32 +8,31 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 
-
+@Repository
 class BookRepositoryImpl(
     private val jdbcTemplate: NamedParameterJdbcTemplate
 ) : BookRepository {
     override fun create(book: Book): Book {
         val keyHolder = GeneratedKeyHolder()
-        val sqlQuery =  "insert into books (title, author, status, isbn) " +
-                        "values (:title, :author, :status, :isbn)"
+        val sqlQuery = "insert into books (composition_id, status, book_descriptions_id) " +
+                "values ( :compositionId, :status, :bookDescriptionId)"
         jdbcTemplate.update(
             sqlQuery,
             MapSqlParameterSource(
                 mapOf(
-                    "title" to book.title,
-                    "author" to book.author,
+                    "compositionId" to book.compositionId,
                     "status" to book.status.name,
-                    "isbn" to book.isbn
-                )),
+                    "bookDescriptionId" to book.bookDescriptionId
+                )
+            ),
             keyHolder,
             listOf("id").toTypedArray()
         )
         return Book(
             id = keyHolder.key!!.toLong(),
-            title = book.title,
-            author = book.author,
+            compositionId = book.compositionId,
             status = book.status,
-            isbn = book.isbn
+            bookDescriptionId = book.bookDescriptionId
         )
     }
 
@@ -54,22 +53,20 @@ class BookRepositoryImpl(
 
     override fun update(id: Long, book: Book): Book {
         jdbcTemplate.update(
-            "update books set title = :title, author = :author, status = :status, isbn = :isbn" +
+            "update books set composition_id = :compositionId, status = :status, book_descriptions_id = :bookDescriptionId" +
                     " where id = :id",
             mapOf(
                 "id" to id,
-                "title" to book.title,
-                "author" to book.author,
+                "compositionId" to book.compositionId,
+                "bookDescriptionId" to book.bookDescriptionId,
                 "status" to book.status.name,
-                "isbn" to book.isbn
             )
         )
         return Book(
             id = id,
-            title = book.title,
-            author = book.author,
-            status = book.status,
-            isbn = book.isbn
+            bookDescriptionId = book.bookDescriptionId,
+            compositionId = book.compositionId,
+            status = book.status
         )
     }
 
@@ -84,10 +81,9 @@ class BookRepositoryImpl(
         val ROW_MAPPER = RowMapper<Book> { rs, _ ->
             Book(
                 id = rs.getLong("id"),
-                title = rs.getString("title"),
-                author = rs.getString("author"),
-                status = Status.valueOf(rs.getString("status")),
-                isbn = rs.getString("isbn")
+                compositionId = rs.getString("composition_id").toLong(),
+                bookDescriptionId = rs.getString("book_description_id").toLong(),
+                status = Status.valueOf(rs.getString("status"))
             )
         }
     }

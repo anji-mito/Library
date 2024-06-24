@@ -6,7 +6,7 @@ import com.bftcom.library.book.repository.BookRepository
 import org.springframework.stereotype.Service
 
 @Service
-class BookServiceImpl(
+class BookServiceImpl (
     private val bookRepository: BookRepository
 ) : BookService {
     override fun getAll(): List<BookDto> {
@@ -33,10 +33,10 @@ class BookServiceImpl(
     }
 
     private fun Book.toDto() = BookDto(
-        id = this.id, title = this.title, author = this.author, status = this.status, isbn = this.isbn
+        id = this.id, compositionId = this.compositionId, status = this.status, bookDescriptionId = this.bookDescriptionId
     )
 
     private fun BookDto.toModel() = Book(
-         id = this.id, title = this.title, author = this.author, status = this.status, isbn = this.isbn
+        id = this.id, compositionId = this.compositionId, status = this.status, bookDescriptionId = this.bookDescriptionId
     )
 }

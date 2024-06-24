@@ -44,12 +44,12 @@ CREATE TABLE IF NOT EXISTS public.books (
     id                   SERIAL PRIMARY KEY,
     composition_id       INTEGER,
     status               CHARACTER VARYING(20),
-    book_descriptions_id INTEGER
+    book_description_id INTEGER
 );
 ALTER TABLE public.books
     ADD FOREIGN KEY (composition_id) REFERENCES public.compositions(id);
 ALTER TABLE public.books
-    ADD FOREIGN KEY (book_descriptions_id) REFERENCES public.book_descriptions(id);
+    ADD FOREIGN KEY (book_description_id) REFERENCES public.book_descriptions(id);
 
 CREATE TABLE IF NOT EXISTS public.readers (
     id          SERIAL PRIMARY KEY,
