@@ -24,7 +24,7 @@ class CompositionRepositoryImplTest {
 
     @Test
     fun testGetCompositionById() {
-        authorRepository.create(Author(1, "Author 1", "Author 1", "Author 1"))
+        authorRepository.save(Author(1, "Author 1", "Author 1", "Author 1"))
         genreRepository.save(Genre(1, "Genre 1"))
         val composition = Composition(1, "Composition 1",
             Author(1, "Author 1", "Author 1", "Author 1"),

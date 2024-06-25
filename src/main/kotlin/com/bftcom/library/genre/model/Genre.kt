@@ -1,6 +1,6 @@
 package com.bftcom.library.genre.model
 
 data class Genre(
-    val id: Long,
+    var id: Long,
     val name: String
 )

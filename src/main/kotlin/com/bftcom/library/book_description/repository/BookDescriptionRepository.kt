@@ -3,14 +3,13 @@ package com.bftcom.library.book_description.repository
 import com.bftcom.library.book_description.model.BookDescription
 
 interface BookDescriptionRepository {
+    fun findBookDescriptionById(id: Long): BookDescription?
 
-    fun getBookDescriptionByIsbn(isbn: String): String
+    fun createBookDescription(bookDescription: BookDescription): BookDescription
 
-    fun getBookDescriptionById(id: Long): String
+    fun updateBookDescription(bookDescription: BookDescription): BookDescription
 
-    fun createBookDescription(bookDescription: BookDescription)
-
-    fun updateBookDescription(bookDescription: BookDescription)
+    fun findBookDescriptionByIsbn(isbn: String): BookDescription?
 
     fun deleteBookDescription(id: Long)
 }

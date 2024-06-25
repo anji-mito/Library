@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS public.loans (
     book_id     INTEGER,
     reader_id   INTEGER,
     loan_date   DATE,
-    loan_days   INTEGER
+    return_date DATE
 );
 ALTER TABLE public.loans
     ADD FOREIGN KEY (book_id) REFERENCES public.books(id);

@@ -1,8 +1,8 @@
 package com.bftcom.library.book.repository
 
 import com.bftcom.library.book.model.Book
-import com.bftcom.library.book.model.Status
-import org.springframework.jdbc.core.RowMapper
+import com.bftcom.library.book_description.repository.BookDescriptionRepository
+import com.bftcom.library.composition.repository.CompositionRepository
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class BookRepositoryImpl(
-    private val jdbcTemplate: NamedParameterJdbcTemplate
+    private val jdbcTemplate: NamedParameterJdbcTemplate,
+    private val bookDescriptionRepository: BookDescriptionRepository,
+    private val compositionRepository: CompositionRepository
 ) : BookRepository {
     override fun create(book: Book): Book {
         val keyHolder = GeneratedKeyHolder()
@@ -20,9 +22,9 @@ class BookRepositoryImpl(
             sqlQuery,
             MapSqlParameterSource(
                 mapOf(
-                    "compositionId" to book.compositionId,
+                    "compositionId" to book.composition.id,
                     "status" to book.status.name,
-                    "bookDescriptionId" to book.bookDescriptionId
+                    "bookDescriptionId" to book.bookDescription.id
                 )
             ),
             keyHolder,
@@ -30,24 +32,24 @@ class BookRepositoryImpl(
         )
         return Book(
             id = keyHolder.key!!.toLong(),
-            compositionId = book.compositionId,
+            composition = book.composition,
             status = book.status,
-            bookDescriptionId = book.bookDescriptionId
+            bookDescription = book.bookDescription
         )
     }
 
-    override fun getAll(): List<Book> {
+    override fun findAll(): List<Book> {
         return jdbcTemplate.query(
             "select * from books",
-            ROW_MAPPER
+            BookRowMapper(bookDescriptionRepository, compositionRepository)
         )
     }
 
-    override fun getById(id: Long): Book? {
+    override fun findById(id: Long): Book? {
         return jdbcTemplate.query(
             "select * from books where id = :id",
             mapOf("id" to id),
-            ROW_MAPPER
+            BookRowMapper(bookDescriptionRepository, compositionRepository)
         ).firstOrNull()
     }
 
@@ -57,15 +59,15 @@ class BookRepositoryImpl(
                     " where id = :id",
             mapOf(
                 "id" to id,
-                "compositionId" to book.compositionId,
-                "bookDescriptionId" to book.bookDescriptionId,
+                "compositionId" to book.composition.id,
+                "bookDescriptionId" to book.bookDescription.id,
                 "status" to book.status.name,
             )
         )
         return Book(
             id = id,
-            bookDescriptionId = book.bookDescriptionId,
-            compositionId = book.compositionId,
+            composition = book.composition,
+            bookDescription = book.bookDescription,
             status = book.status
         )
     }
@@ -75,16 +77,5 @@ class BookRepositoryImpl(
             "delete from books where id = :id",
             mapOf("id" to id)
         )
-    }
-
-    private companion object {
-        val ROW_MAPPER = RowMapper<Book> { rs, _ ->
-            Book(
-                id = rs.getLong("id"),
-                compositionId = rs.getString("composition_id").toLong(),
-                bookDescriptionId = rs.getString("book_description_id").toLong(),
-                status = Status.valueOf(rs.getString("status"))
-            )
-        }
     }
 }

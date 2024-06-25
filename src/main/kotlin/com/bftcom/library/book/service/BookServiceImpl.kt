@@ -10,33 +10,22 @@ class BookServiceImpl (
     private val bookRepository: BookRepository
 ) : BookService {
     override fun getAll(): List<BookDto> {
-        return bookRepository.getAll().map { it.toDto() }
+        TODO()
     }
 
     override fun getById(id: Long): BookDto {
-        bookRepository.getById(id)?.let {
-            return it.toDto()
-        }
-        throw IllegalArgumentException("Book with id $id not found")
+        TODO()
     }
 
     override fun create(dto: BookDto): BookDto {
-        return bookRepository.create(dto.toModel()).toDto()
+        TODO()
     }
 
     override fun update(id: Long, dto: BookDto): BookDto {
-        return bookRepository.update(id, dto.toModel()).toDto()
+        TODO()
     }
 
     override fun delete(id: Long) {
-        bookRepository.delete(id)
+        TODO()
     }
-
-    private fun Book.toDto() = BookDto(
-        id = this.id, compositionId = this.compositionId, status = this.status, bookDescriptionId = this.bookDescriptionId
-    )
-
-    private fun BookDto.toModel() = Book(
-        id = this.id, compositionId = this.compositionId, status = this.status, bookDescriptionId = this.bookDescriptionId
-    )
 }

@@ -18,7 +18,7 @@ class AuthorRepositoryImpl(
         )
     }
 
-    override fun getById(id: Long): Author? {
+    override fun findById(id: Long): Author? {
         return jdbcTemplate.query(
             "select * from authors where id = :id",
             mapOf("id" to id),
@@ -26,7 +26,7 @@ class AuthorRepositoryImpl(
         ).firstOrNull()
     }
 
-    override fun create(author: Author): Author {
+    override fun save(author: Author): Author {
         val keyHolder = GeneratedKeyHolder()
         val sqlQuery = "insert into authors (name, surname, patronymic) " +
                 "values ( :name, :surname, :patronymic)"
@@ -42,12 +42,8 @@ class AuthorRepositoryImpl(
             keyHolder,
             listOf("id").toTypedArray()
         )
-        return Author(
-            id = keyHolder.key!!.toLong(),
-            name = author.name,
-            surname = author.surname,
-            patronymic = author.patronymic
-        )
+        author.id = keyHolder.key!!.toLong()
+        return author
     }
 
     override fun update(id: Long, author: Author): Author {
@@ -61,12 +57,7 @@ class AuthorRepositoryImpl(
                 "patronymic" to author.patronymic
             )
         )
-        return Author(
-            id = id,
-            name = author.name,
-            surname = author.surname,
-            patronymic = author.patronymic
-        )
+        return author
     }
 
     override fun delete(id: Long) {

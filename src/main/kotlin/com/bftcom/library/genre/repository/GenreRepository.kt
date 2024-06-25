@@ -3,7 +3,6 @@ package com.bftcom.library.genre.repository
 import com.bftcom.library.genre.model.Genre
 
 interface GenreRepository {
-
     fun findById(id: Long): Genre?
 
     fun findAll(): List<Genre>

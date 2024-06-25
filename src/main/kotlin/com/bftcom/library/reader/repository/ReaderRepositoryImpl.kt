@@ -64,13 +64,7 @@ class ReaderRepositoryImpl(
                 "phone" to reader.phone
             )
         )
-        return Reader(
-            id = id,
-            name = reader.name,
-            surname = reader.surname,
-            phone = reader.phone,
-            email = reader.email
-        )
+        return reader
     }
 
     override fun delete(id: Long) {
